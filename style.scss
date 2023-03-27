@@ -1,0 +1,146 @@
+/* Define a primary color */
+$primary-color: #00bfff;
+
+/* Define a secondary color */
+$secondary-color: #f4a460;
+
+/* Define font sizes */
+$font-xs: 12px;
+$font-sm: 14px;
+$font-md: 16px;
+$font-lg: 18px;
+
+/* Define padding and margin sizes */
+$padding-xs: 5px;
+$padding-sm: 10px;
+$padding-md: 15px;
+$padding-lg: 20px;
+
+$margin-xs: 5px;
+$margin-sm: 10px;
+$margin-md: 15px;
+$margin-lg: 20px;
+
+/* Define border radius */
+$border-radius: 5px;
+
+/* Define background colors */
+$background-color: #f5f5f5;
+$background-color-alt: #fff;
+
+/* Define box-shadow */
+$box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+
+/* Define styles for the to-do list container */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: $padding-md;
+  background-color: $background-color;
+  box-shadow: $box-shadow;
+  border-radius: $border-radius;
+}
+
+/* Define styles for the to-do list heading */
+h2 {
+  font-size: $font-lg;
+  font-weight: bold;
+  margin-bottom: $margin-md;
+  color: $primary-color;
+}
+
+/* Define styles for the to-do list */
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $padding-sm $padding-md;
+  margin-bottom: $margin-sm;
+  background-color: $background-color-alt;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+
+  /* Define styles for completed tasks */
+  &.completed {
+    opacity: 0.5;
+    text-decoration: line-through;
+  }
+
+  /* Define styles for delete button */
+  button {
+    padding: $padding-xs $padding-sm;
+    margin-left: $margin-md;
+    background-color: $secondary-color;
+    color: $background-color-alt;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken($secondary-color, 10%);
+    }
+  }
+
+  /* Define styles for checkbox */
+  input[type="checkbox"] {
+    margin-top: $margin-xs;
+    margin-left: $margin-md;
+    cursor: pointer;
+
+    &:checked + p {
+      text-decoration: line-through;
+      opacity: 0.5;
+    }
+  }
+
+  /* Define styles for task content */
+  p {
+    font-size: $font-md;
+    color: $primary-color;
+    margin: 0;
+  }
+}
+
+/* Define styles for the filter checkboxes */
+div > label {
+  margin-right: $margin-md;
+
+  input[type="checkbox"] {
+    margin-right: $margin-xs;
+    cursor: pointer;
+  }
+}
+
+/* Define styles for the add task form */
+form {
+  display: flex;
+  align-items: center;
+  margin-top: $margin-md;
+
+  label {
+    margin-right: $margin-md;
+
+    input[type="text"] {
+      padding: $padding-xs $padding-sm;
+      font-size: $font-md;
+      border: none;
+      border-radius: $border-radius;
+      box-shadow: $box-shadow;
+    }
+  }
+
+  button {
+    padding: $padding-xs $padding-sm;
+    background-color: $primary-color;
+    color: $background-color-alt;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+}

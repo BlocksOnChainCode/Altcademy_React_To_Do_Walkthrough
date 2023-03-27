@@ -1,0 +1,109 @@
+/* Define a primary color */
+/* Define a secondary color */
+/* Define font sizes */
+/* Define padding and margin sizes */
+/* Define border radius */
+/* Define background colors */
+/* Define box-shadow */
+/* Define styles for the to-do list container */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 15px;
+  background-color: #f5f5f5;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+/* Define styles for the to-do list heading */
+h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #00bfff;
+}
+
+/* Define styles for the to-do list */
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  /* Define styles for completed tasks */
+  /* Define styles for delete button */
+  /* Define styles for checkbox */
+  /* Define styles for task content */
+}
+.row.completed {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+.row button {
+  padding: 5px 10px;
+  margin-left: 15px;
+  background-color: #f4a460;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.row button:hover {
+  background-color: #f18930;
+}
+.row input[type=checkbox] {
+  margin-top: 5px;
+  margin-left: 15px;
+  cursor: pointer;
+}
+.row input[type=checkbox]:checked + p {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+.row p {
+  font-size: 16px;
+  color: #00bfff;
+  margin: 0;
+}
+
+/* Define styles for the filter checkboxes */
+div > label {
+  margin-right: 15px;
+}
+div > label input[type=checkbox] {
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+/* Define styles for the add task form */
+form {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+}
+form label {
+  margin-right: 15px;
+}
+form label input[type=text] {
+  padding: 5px 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+form button {
+  padding: 5px 10px;
+  background-color: #00bfff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+form button:hover {
+  background-color: #0099cc;
+}/*# sourceMappingURL=style.css.map */

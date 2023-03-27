@@ -18,25 +18,104 @@ var json = function json(response) {
   return response.json();
 };
 
-var ToDoList = function (_React$Component) {
-  _inherits(ToDoList, _React$Component);
+var Task = function (_React$Component) {
+  _inherits(Task, _React$Component);
+
+  function Task() {
+    _classCallCheck(this, Task);
+
+    return _possibleConstructorReturn(this, (Task.__proto__ || Object.getPrototypeOf(Task)).apply(this, arguments));
+  }
+
+  _createClass(Task, [{
+    key: "render",
+    value: function render() {
+      var _props = this.props,
+          task = _props.task,
+          onDelete = _props.onDelete,
+          onComplete = _props.onComplete;
+      var id = task.id,
+          content = task.content,
+          completed = task.completed;
+
+      return React.createElement(
+        "div",
+        { className: "row mb-1" },
+        React.createElement(
+          "p",
+          { className: "col" },
+          content
+        ),
+        React.createElement(
+          "button",
+          { onClick: function onClick() {
+              return onDelete(id);
+            } },
+          "Delete"
+        ),
+        React.createElement("input", {
+          className: "d-inline-block mt-2",
+          type: "checkbox",
+          onChange: function onChange() {
+            return onComplete(id, completed);
+          },
+          checked: completed
+        })
+      );
+    }
+  }]);
+
+  return Task;
+}(React.Component);
+
+var ToDoList = function (_React$Component2) {
+  _inherits(ToDoList, _React$Component2);
 
   function ToDoList(props) {
     _classCallCheck(this, ToDoList);
 
-    var _this = _possibleConstructorReturn(this, (ToDoList.__proto__ || Object.getPrototypeOf(ToDoList)).call(this, props));
+    var _this2 = _possibleConstructorReturn(this, (ToDoList.__proto__ || Object.getPrototypeOf(ToDoList)).call(this, props));
 
-    _this.state = {
+    _this2.state = {
       new_task: "",
-      tasks: []
+      tasks: [],
+      filter: "all" // 'all', 'active', 'complete'
     };
 
-    _this.handleChange = _this.handleChange.bind(_this);
-    _this.handleSubmit = _this.handleSubmit.bind(_this);
-    return _this;
+    _this2.toggleComplete = _this2.toggleComplete.bind(_this2);
+    _this2.deleteTask = _this2.deleteTask.bind(_this2);
+    _this2.handleChange = _this2.handleChange.bind(_this2);
+    _this2.handleSubmit = _this2.handleSubmit.bind(_this2);
+    _this2.toggleFilter = _this2.toggleFilter.bind(_this2);
+    _this2.fetchTasks = _this2.fetchTasks.bind(_this2);
+    return _this2;
   }
 
   _createClass(ToDoList, [{
+    key: "toggleFilter",
+    value: function toggleFilter(e) {
+      console.log(e.target.name);
+      this.setState({
+        filter: e.target.name
+      });
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.fetchTasks();
+    }
+  }, {
+    key: "fetchTasks",
+    value: function fetchTasks() {
+      var _this3 = this;
+
+      fetch("https://fewd-todolist-api.onrender.com/tasks?api_key=149").then(checkStatus).then(json).then(function (data) {
+        _this3.setState({ tasks: data.tasks });
+      }).catch(function (error) {
+        console.log("Looks like there was a problem: \n", error);
+      });
+    }
+  }, {
     key: "handleChange",
     value: function handleChange(event) {
       this.setState({ new_task: event.target.value });
@@ -44,16 +123,78 @@ var ToDoList = function (_React$Component) {
   }, {
     key: "handleSubmit",
     value: function handleSubmit(event) {
+      var _this4 = this;
+
       event.preventDefault();
-      // do nothing for now
+      var new_task = this.state.new_task;
+
+      new_task = new_task.trim();
+      if (!new_task) {
+        return;
+      }
+      fetch("https://fewd-todolist-api.onrender.com/tasks?api_key=149", {
+        method: "POST",
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          task: {
+            content: new_task
+          }
+        })
+      }).then(checkStatus).then(json).then(function (data) {
+        _this4.setState({ new_task: "" });
+        _this4.fetchTasks();
+      }).catch(function (error) {
+        _this4.setState({ error: error.message });
+        console.log(error);
+      });
+    }
+  }, {
+    key: "deleteTask",
+    value: function deleteTask(id) {
+      var _this5 = this;
+
+      if (!id) {
+        return; // if no id is supplied, early return
+      }
+      fetch("https://fewd-todolist-api.onrender.com/tasks/" + id + "?api_key=149", {
+        method: "DELETE",
+        mode: "cors"
+      }).then(checkStatus).then(json).then(function (data) {
+        _this5.fetchTasks(); // fetch tasks after delete
+      }).catch(function (error) {
+        _this5.setState({ error: error.message });
+        console.log(error);
+      });
+    }
+  }, {
+    key: "toggleComplete",
+    value: function toggleComplete(id, completed) {
+      var _this6 = this;
+
+      if (!id) {
+        return; // early return if no id
+      }
+      var newState = completed ? "active" : "complete";
+      fetch("https://fewd-todolist-api.onrender.com/tasks/" + id + "/mark_" + newState + "?api_key=149", {
+        method: "PUT",
+        mode: "cors"
+      }).then(checkStatus).then(json).then(function (data) {
+        _this6.fetchTasks();
+      }).catch(function (error) {
+        _this6.setState({ error: error.message });
+        console.log(error);
+      });
     }
   }, {
     key: "render",
     value: function render() {
+      var _this7 = this;
+
       var _state = this.state,
           new_task = _state.new_task,
-          tasks = _state.tasks;
-
+          tasks = _state.tasks,
+          filter = _state.filter;
 
       return React.createElement(
         "div",
@@ -69,28 +210,87 @@ var ToDoList = function (_React$Component) {
               { className: "mb-3" },
               "To Do List"
             ),
-            tasks.length > 0 ? tasks.map(function (task) {
-              return null; // return nothing for now
+            tasks.length > 0 ? tasks.filter(function (task) {
+              if (filter === "all") {
+                return true;
+              } else if (filter === "active") {
+                return !task.completed;
+              } else {
+                return task.completed;
+              }
+            }).map(function (task) {
+              return React.createElement(Task, {
+                key: task.id,
+                task: task,
+                onDelete: _this7.deleteTask,
+                onComplete: _this7.toggleComplete
+              });
             }) : React.createElement(
               "p",
               null,
               "no tasks here"
             ),
             React.createElement(
-              "form",
-              { onSubmit: this.handleSubmit, className: "form-inline my-4" },
-              React.createElement("input", {
-                type: "text",
-                className: "form-control mr-sm-2 mb-2",
-                placeholder: "new task",
-                value: new_task,
-                onChange: this.handleChange
-              }),
+              "div",
+              { className: "mt-3" },
               React.createElement(
-                "button",
-                { type: "submit", className: "btn btn-primary mb-2" },
-                "Submit"
+                "label",
+                null,
+                React.createElement("input", {
+                  type: "checkbox",
+                  name: "all",
+                  checked: filter === "all",
+                  onChange: this.toggleFilter
+                }),
+                " ",
+                "All"
+              ),
+              React.createElement(
+                "label",
+                null,
+                React.createElement("input", {
+                  type: "checkbox",
+                  name: "active",
+                  checked: filter === "active",
+                  onChange: this.toggleFilter
+                }),
+                " ",
+                "Active"
+              ),
+              React.createElement(
+                "label",
+                null,
+                React.createElement("input", {
+                  type: "checkbox",
+                  name: "completed",
+                  checked: filter === "completed",
+                  onChange: this.toggleFilter
+                }),
+                " ",
+                "Completed"
               )
+            )
+          )
+        ),
+        React.createElement(
+          "div",
+          { className: "row" },
+          React.createElement(
+            "div",
+            { className: "col-12" },
+            React.createElement(
+              "form",
+              { onSubmit: this.handleSubmit },
+              React.createElement(
+                "label",
+                null,
+                React.createElement("input", {
+                  type: "text",
+                  value: new_task,
+                  onChange: this.handleChange
+                })
+              ),
+              React.createElement("input", { type: "submit", value: "Submit" })
             )
           )
         )
